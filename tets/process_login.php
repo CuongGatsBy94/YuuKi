@@ -1,35 +1,30 @@
 <?php
-/**
- * @Author: Your name
- * @Date:   2024-11-08 19:36:24
- * @Last Modified by:   Your name
- * @Last Modified time: 2024-11-08 20:37:48
- */
+// Mã bảo mật của Google reCAPTCHA
+$secretKey = '6LdV93gqAAAAALao9ScJ2eyvH3aRZdpqgu72xQp8';
+$recaptchaResponse = $_POST['g-recaptcha-response'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy giá trị của reCAPTCHA từ form
-    $recaptcha_response = $_POST['g-recaptcha-response'];
+// Kiểm tra nếu người dùng đã gửi reCAPTCHA
+if(!$recaptchaResponse) {
+    die("reCAPTCHA verification failed. Please try again.");
+}
 
-    // Kiểm tra nếu người dùng không hoàn thành reCAPTCHA
-    if (empty($recaptcha_response)) {
-        die('Please complete the reCAPTCHA');
-    }
+// Kiểm tra reCAPTCHA với Google
+$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptchaResponse");
+$responseKeys = json_decode($response, true);
 
-    // Xác thực với Google
-    $secret_key = "6LdV93gqAAAAALao9ScJ2eyvH3aRZdpqgu72xQp8";  // Thay bằng Secret Key của bạn
-    $verify_url = "https://www.google.com/recaptcha/api/siteverify";
+if(intval($responseKeys['success']) !== 1) {
+    die("reCAPTCHA verification failed. Please try again.");
+} else {
+    // Nếu reCAPTCHA hợp lệ, tiếp tục xử lý đăng nhập
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Tiến hành xác thực email và password với cơ sở dữ liệu của bạn ở đây...
+    // Ví dụ:
+    // $db = new mysqli('localhost', 'root', '', 'your_database');
+    // $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+    // $result = $db->query($query);
     
-    // Khởi tạo cURL để gửi yêu cầu xác thực
-    $response = file_get_contents($verify_url . "?secret=" . $secret_key . "&response=" . $recaptcha_response);
-    $response_keys = json_decode($response, true);
-    
-    // Kiểm tra kết quả
-    if (intval($response_keys["success"]) !== 1) {
-        die('reCAPTCHA verification failed, please try again.');
-    } else {
-        // Xử lý đăng nhập
-        echo "reCAPTCHA verified successfully!";
-        // Tiến hành xác thực người dùng từ cơ sở dữ liệu...
-    }
+    // Xử lý đăng nhập nếu xác thực thành công
 }
 ?>
