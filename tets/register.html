@@ -1,0 +1,55 @@
+<!-- 
+  @Author: Your name
+  @Date:   2024-11-08 19:36:09
+  @Last Modified by:   Your name
+  @Last Modified time: 2024-11-08 20:38:36
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-16x16.png">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script> <!-- Load reCAPTCHA script -->
+</head>
+<body>
+    <div class="wrapper">
+        <h2>Đăng Ký</h2>
+        <form id="register-form" action="process_register.php" method="POST">
+            <div class="field email">
+                <div class="input-area">
+                    <input type="text" name="email" placeholder="Email Address" class="input-form" required>
+                    <i class="icon fas fa-envelope"></i>
+                    <i class="error error-icon fas fa-circle-exclamation"></i>
+                </div>
+                <p class="error error-txt">Email can't be blank</p>
+            </div>
+            <div class="field password">
+                <div class="input-area">
+                    <input type="password" name="password" placeholder="Password" class="input-form" required>
+                    <i class="icon fas fa-lock"></i>
+                    <i class="error error-icon fas fa-circle-exclamation"></i>
+                </div>
+                <p class="error error-txt">Password can't be blank</p>
+            </div>
+            
+            <!-- Thêm reCAPTCHA vào form -->
+            <div class="g-recaptcha" 
+                 data-sitekey="6LdV93gqAAAAAPhsQQ21c5Is3ApQaOVoUDbfSJrp" 
+                 data-callback="onSubmit" 
+                 data-action="submit"></div>
+            
+            <input type="submit" value="Register">
+        </form>
+        <div class="signup-link">Already have an account? <a href="login.html">Login Now</a></div>
+    </div>
+
+    <script>
+        function onSubmit(token) {
+            document.getElementById("register-form").submit();
+        }
+    </script>
+</body>
+</html>
